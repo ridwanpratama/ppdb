@@ -27,7 +27,7 @@
                                 <a href="{{ route('print') }}" class="btn btn-secondary btn-sm">Print</a>
                             </form>
                         @empty
-                            <p>Tidak ada data</p> Silahkan isi kembali <a href="{{ route('home') }}">disini</a>
+                            <p>Tidak ada data</p> Silahkan isi <a href="{{ route('home') }}">disini</a>
                         @endforelse
                     </div>
                 </div>
