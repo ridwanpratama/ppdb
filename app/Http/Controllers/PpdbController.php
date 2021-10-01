@@ -77,8 +77,7 @@ class PpdbController extends Controller
                     'alamat' => $request->get('alamat'),
                     'asal_sekolah' => $request->get('asal_sekolah'),
                     'kelas' => $request->get('kelas'),
-                    'jurusan' => $request->get('jurusan'),
-
+                    'jurusan' => $request->get('jurusan')
                 ]);
             } catch (\Exception $e) {
                 dd("Error: data tidak dapat diperoleh. {$e->getMessage()}");
