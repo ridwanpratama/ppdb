@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 class PpdbController extends Controller
 {
-    public function validation(Request $request)
+    public function validation()
     {
-        $validation = $request->validate([
-            'user_id' => 'required|unique:ppdb,user_id',
+        $validation = $this->validate([
+            'user_id' => 'required|unique:ppdb,user_id|exists:ppdb,id',
             'nis' => 'required',
             'nama' => 'required',
             'jk' => 'required',
@@ -27,19 +27,23 @@ class PpdbController extends Controller
     public function store(Request $request)
     {
         $this->validation($request);
-
-        Ppdb::create([
-            'user_id' => $request->user_id,
-            'nis' => $request->nis,
-            'nama' => $request->nama,
-            'jk' => $request->jk,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'alamat' => $request->alamat,
-            'asal_sekolah' => $request->asal_sekolah,
-            'kelas' => $request->kelas,
-            'jurusan' => $request->jurusan,
-        ]);
+        
+        try {
+            Ppdb::create([
+                'user_id' => $request->user_id,
+                'nis' => $request->nis,
+                'nama' => $request->nama,
+                'jk' => $request->jk,
+                'tempat_lahir' => $request->tempat_lahir,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'alamat' => $request->alamat,
+                'asal_sekolah' => $request->asal_sekolah,
+                'kelas' => $request->kelas,
+                'jurusan' => $request->jurusan,
+            ]);
+        } catch (\Exception $e) {
+            dd("Error: data tidak dapat diperoleh. {$e->getMessage()}");
+        }
 
         return redirect('ppdb.index');
     }
@@ -58,22 +62,31 @@ class PpdbController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request->all());
+        $data = Ppdb::where('id', $id)->first();
+        
+        if($data) {
+            
+            try {
+                $data->update([
+                    'user_id' => $request->get('user_id'),
+                    'nis' => $request->get('nis'),
+                    'nama' => $request->get('nama'),
+                    'jk' => $request->get('jk'),
+                    'tempat_lahir' => $request->get('tempat_lahir'),
+                    'tanggal_lahir' => $request->get('tanggal_lahir'),
+                    'alamat' => $request->get('alamat'),
+                    'asal_sekolah' => $request->get('asal_sekolah'),
+                    'kelas' => $request->get('kelas'),
+                    'jurusan' => $request->get('jurusan'),
 
-        $data = Ppdb::find($id);
-        $data->update([
-            'user_id' => $request->get('user_id'),
-            'nis' => $request->get('nis'),
-            'nama' => $request->get('nama'),
-            'jk' => $request->get('jk'),
-            'tempat_lahir' => $request->get('tempat_lahir'),
-            'tanggal_lahir' => $request->get('tanggal_lahir'),
-            'alamat' => $request->get('alamat'),
-            'asal_sekolah' => $request->get('asal_sekolah'),
-            'kelas' => $request->get('kelas'),
-            'jurusan' => $request->get('jurusan'),
-
-        ]);
+                ]);
+            } catch (\Exception $e) {
+                dd("Error: data tidak dapat diperoleh. {$e->getMessage()}");
+            }
+            
+        } else {
+            return back();
+        }
 
         return redirect()->route('ppdb.index');
     }
