@@ -50,7 +50,12 @@ class PpdbController extends Controller
 
     public function index()
     {
-        $data = Ppdb::where('user_id', '=', Auth::user()->id)->get();
+        try {
+            $data = Ppdb::where('user_id', '=', Auth::user()->id)->get();
+        } catch (\Exception $e) {
+            dd("Error: data tidak dapat diperoleh. {$e->getMessage()}");
+        }
+
         return view('ppdb.index', compact('data'));
     }
 
