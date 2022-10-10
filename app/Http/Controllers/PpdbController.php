@@ -85,7 +85,8 @@ class PpdbController extends Controller
                     'jurusan' => $request->get('jurusan')
                 ]);
             } catch (\Exception $e) {
-                dd("Error: data tidak dapat diperoleh. {$e->getMessage()}");
+                \Log::error($e);
+                return "Something went wrong";
             }
             
         } else {
